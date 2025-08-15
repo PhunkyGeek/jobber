@@ -15,6 +15,7 @@ export default async function handler(req, res) {
     const update = {};
     if (action === 'publish') update.status = 'Published';
     else if (action === 'draft') update.status = 'Draft';
+    else if (action === 'close') update.status = 'Closed';
     else if (action === 'deactivate') update.active = false;
     else if (action === 'activate') update.active = true;
     else return res.status(400).json({ error: 'Invalid action' });

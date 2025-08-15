@@ -62,6 +62,7 @@ export default function JobForm({ initial }) {
             <select className="w-full mt-1 border rounded-lg p-2" value={status} onChange={e=>setStatus(e.target.value)}>
               <option>Draft</option>
               <option>Published</option>
+              <option>Closed</option>
               <option>Deactivated</option>
             </select>
           </div>

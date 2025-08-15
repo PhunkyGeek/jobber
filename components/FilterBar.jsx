@@ -69,6 +69,7 @@ export default function FilterBar({ onFilter }) {
         <option value="">Status</option>
         <option value="Published">Published</option>
         <option value="Draft">Draft</option>
+        <option value="Closed">Closed</option>
         <option value="Deactivated">Deactivated</option>
       </select>
 
