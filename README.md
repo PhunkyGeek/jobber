@@ -13,6 +13,9 @@ A small jobs board implementing:
    npm install
    ```
 2. Copy `.env.example` to `.env.local` and set `MONGODB_URI`.
+
+Sample: MONGODB_URI=mongodb+srv://<USER>:<PASSWORD>@cluster0.xxxxx.mongodb.net/jobs-app?retryWrites=true&w=majority
+
 3. Run
    ```bash
    npm run dev
