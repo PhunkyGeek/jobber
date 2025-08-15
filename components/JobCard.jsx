@@ -193,7 +193,7 @@ export default function JobCard({ job, onChanged }) {
             }}
             className={`icon-btn w-6 h-3 ${
               job.active ? "bg-blue-600" : "bg-gray-400"
-            } rounded-full relative transition-all duration-300 hover:bg-transparent`}
+            } rounded-full relative transition-all duration-300`}
             title={job.active ? "Deactivate" : "Activate"}
           >
             <span
