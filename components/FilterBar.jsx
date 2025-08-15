@@ -30,7 +30,7 @@ export default function FilterBar({ onFilter }) {
         />
       </div>
 
-      {/* Filter selects */}
+      {/* Department */}
       <select
         value={department}
         onChange={(e) => setDepartment(e.target.value)}
@@ -42,6 +42,7 @@ export default function FilterBar({ onFilter }) {
         <option value="Sales">Sales</option>
       </select>
 
+      {/* Location */}
       <select
         value={location}
         onChange={(e) => setLocation(e.target.value)}
@@ -52,6 +53,7 @@ export default function FilterBar({ onFilter }) {
         <option value="Abuja">Abuja</option>
       </select>
 
+      {/* Owner */}
       <select
         value={owner}
         onChange={(e) => setOwner(e.target.value)}
@@ -61,6 +63,7 @@ export default function FilterBar({ onFilter }) {
         <option value="John Doe">John Doe</option>
       </select>
 
+      {/* Status */}
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value)}
@@ -73,6 +76,7 @@ export default function FilterBar({ onFilter }) {
         <option value="Deactivated">Deactivated</option>
       </select>
 
+      {/* Date Posted */}
       <select
         value={datePosted}
         onChange={(e) => setDatePosted(e.target.value)}
@@ -84,7 +88,7 @@ export default function FilterBar({ onFilter }) {
         <option value="30d">Last 30 days</option>
       </select>
 
-      {/* Submit button with arrow */}
+      {/* Submit button with bold arrow */}
       <button
         type="submit"
         className="pill flex items-center font-bold text-blue-900"

@@ -6,23 +6,81 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const { status, keyword, page = 1, limit = 6, sort = '-createdAt' } = req.query;
-      const filters = {};
-      if (status) filters.status = status;
+      const {
+        status,
+        keyword,
+        department,
+        location,
+        owner,
+        datePosted,
+        page = 1,
+        limit = 6,
+        sort = 'createdAt_desc'
+      } = req.query;
+
+      const query = {};
+
+      // Status filter
+      if (status) query.status = status;
+
+      // Keyword search in title, company, location
       if (keyword) {
         const rx = new RegExp(keyword, 'i');
-        filters.$or = [{ title: rx }, { company: rx }, { location: rx }];
+        query.$or = [{ title: rx }, { company: rx }, { location: rx }];
       }
 
-      const total = await Job.countDocuments(filters);
-      const jobs = await Job.find(filters)
-        .sort(String(sort))
-        .skip((Number(page) - 1) * Number(limit))
+      // Department filter
+      if (department) query.department = department;
+
+      // Location filter
+      if (location) query.location = location;
+
+      // Owner filter
+      if (owner) query.owner = owner;
+
+      // Date Posted filter
+      if (datePosted) {
+        const now = new Date();
+        let startDate;
+        if (datePosted === '24h') {
+          startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        } else if (datePosted === '7d') {
+          startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        } else if (datePosted === '30d') {
+          startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        }
+        if (startDate) query.createdAt = { $gte: startDate };
+      }
+
+      // Sorting
+      const sortOptions = {};
+      if (sort === 'createdAt_desc') {
+        sortOptions.createdAt = -1;
+      } else if (sort === 'createdAt_asc') {
+        sortOptions.createdAt = 1;
+      } else {
+        sortOptions[sort] = 1;
+      }
+
+      // Pagination
+      const skip = (Number(page) - 1) * Number(limit);
+
+      const jobs = await Job.find(query)
+        .sort({ createdAt: -1 })
+        .skip(skip)
         .limit(Number(limit))
         .lean();
 
-      return res.status(200).json({ jobs, total, page: Number(page), limit: Number(limit) });
-    } catch (e) {
+      const total = await Job.countDocuments(query);
+
+      return res.status(200).json({
+        jobs,
+        total,
+        page: Number(page),
+        pages: Math.ceil(total / Number(limit))
+      });
+    } catch (err) {
+      console.error(err);
       return res.status(500).json({ error: 'Failed to fetch jobs' });
     }
   }
@@ -31,11 +89,11 @@ export default async function handler(req, res) {
     try {
       const job = await Job.create(req.body);
       return res.status(201).json(job);
-    } catch (e) {
-      return res.status(400).json({ error: 'Invalid job payload' });
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
     }
   }
 
   res.setHeader('Allow', ['GET', 'POST']);
-  res.status(405).end();
+  res.status(405).end(`Method ${req.method} Not Allowed`);
 }
